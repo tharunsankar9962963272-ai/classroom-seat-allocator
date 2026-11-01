@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Classroom Seat Allocator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪑</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="/vendor/supabase.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <h1>Classroom Seat Allocator</h1>
+          <p class="subtitle">
+            Rows required and empty seats in the final row — synced live to every browser.
+          </p>
+        </div>
+        <div id="status" class="status status--connecting" role="status" aria-live="polite">
+          <span class="status__dot" aria-hidden="true"></span>
+          <span id="statusText">Connecting…</span>
+        </div>
+      </header>
+
+      <section class="card" aria-labelledby="allocateHeading">
+        <h2 id="allocateHeading" class="card__title">New allocation</h2>
+
+        <form id="allocatorForm" novalidate autocomplete="off">
+          <div class="field">
+            <label for="students">Number of students</label>
+            <input
+              id="students"
+              name="students"
+              type="number"
+              inputmode="numeric"
+              min="0"
+              max="100000"
+              step="1"
+              placeholder="e.g. 47"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="seatsPerRow">Seats per row</label>
+            <input
+              id="seatsPerRow"
+              name="seatsPerRow"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              max="1000"
+              step="1"
+              placeholder="e.g. 6"
+              required
+            />
+          </div>
+
+          <button id="submitBtn" class="btn btn--primary" type="submit">
+            <span class="btn__label">Allocate seats</span>
+          </button>
+
+          <p id="formError" class="form-error" role="alert" hidden></p>
+        </form>
+
+        <div class="preview" aria-live="polite">
+          <div class="preview__item">
+            <span class="preview__label">Rows required</span>
+            <span class="preview__value" id="previewRows">—</span>
+          </div>
+          <div class="preview__item">
+            <span class="preview__label">Empty in last row</span>
+            <span class="preview__value" id="previewEmpty">—</span>
+          </div>
+          <div class="preview__item">
+            <span class="preview__label">Total seats</span>
+            <span class="preview__value" id="previewTotal">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="historyHeading">
+        <div class="table-head">
+          <h2 id="historyHeading" class="card__title">History</h2>
+          <button id="refreshBtn" class="btn btn--ghost" type="button">Refresh</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">When</th>
+                <th scope="col" class="num">Students</th>
+                <th scope="col" class="num">Seats/row</th>
+                <th scope="col" class="num">Rows</th>
+                <th scope="col" class="num">Empty last row</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+          <p id="emptyState" class="empty">No allocations yet. Add the first one above.</p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
